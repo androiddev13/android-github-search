@@ -6,4 +6,4 @@ data class Repository(val id: Int,
                       val name: String,
                       val fullName: String,
                       val owner: RepositoryOwner,
-                      val createdAt: Date)
+                      val updatedAt: Date)

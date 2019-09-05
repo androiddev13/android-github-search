@@ -1,6 +1,7 @@
 package com.githubsearch.presentation
 
 import android.view.ViewGroup
+import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,8 @@ class RepositoryAdapter(private val onRetryClick: ()-> Unit)
 
     private var networkStatus: NetworkStatus? = null
 
+    private var query: String = ""
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
             Item.REPOSITORY.value -> RepositoryViewHolder.create(parent)
@@ -27,7 +30,7 @@ class RepositoryAdapter(private val onRetryClick: ()-> Unit)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            Item.REPOSITORY.value -> (holder as RepositoryViewHolder).bind(getItem(position))
+            Item.REPOSITORY.value -> (holder as RepositoryViewHolder).bind(getItem(position), query)
             Item.NETWORK_STATUS.value -> (holder as RepositoryNetworkStatusViewHolder).bind(networkStatus)
         }
     }
@@ -66,6 +69,11 @@ class RepositoryAdapter(private val onRetryClick: ()-> Unit)
                 }
             }
         }
+    }
+
+    fun setData(list: PagedList<Repository>, query: String) {
+        this.query = query
+        submitList(list)
     }
 
     companion object {

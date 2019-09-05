@@ -1,6 +1,5 @@
 package com.githubsearch.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -35,14 +34,18 @@ class GithubSearchViewModel @Inject constructor(repoRepository: RepoRepository):
     val initialLoadStatusLiveData: LiveData<NetworkStatus>
         get() = _initialLoadStatusLiveData
 
-    private val queryLiveData = MutableLiveData<SearchQuery>()
+    private val _queryLiveData = MutableLiveData<SearchQuery>()
+    val queryLiveData: LiveData<SearchQuery>
+        get() = _queryLiveData
+
+    private val pageSize = 10
 
     init {
         val config = PagedList.Config.Builder()
-            .setPageSize(10)
-            .setInitialLoadSizeHint(10)
+            .setPageSize(pageSize)
+            .setInitialLoadSizeHint(pageSize)
             .build()
-        _repositoriesLiveData = Transformations.switchMap<SearchQuery, PagedList<Repository>>(queryLiveData) {
+        _repositoriesLiveData = Transformations.switchMap<SearchQuery, PagedList<Repository>>(_queryLiveData) {
             repositoryDataSourceFactory.query = it
             LivePagedListBuilder(repositoryDataSourceFactory, config).build()
         }
@@ -57,7 +60,7 @@ class GithubSearchViewModel @Inject constructor(repoRepository: RepoRepository):
     }
 
     fun setQuery(query: String) {
-        queryLiveData.value = SearchQuery(query, SearchQueryTarget.NAME)
+        _queryLiveData.value = SearchQuery(query, SearchQueryTarget.NAME)
     }
 
     override fun onCleared() {

@@ -18,10 +18,10 @@ class RepositoryNetworkStatusViewHolder(view: View,  private val onRetryClick: (
     }
 
     fun bind(networkStatus: NetworkStatus?) {
-        itemView.errorMessageTextView.visibility = if (networkStatus?.message != null) View.VISIBLE else View.GONE
+        itemView.errorMessageTextView.visibility = if (networkStatus?.message != null) View.VISIBLE else View.INVISIBLE
         itemView.errorMessageTextView.text = networkStatus?.message
-        itemView.retryButton.visibility = if (networkStatus?.status == Status.FAILED) View.VISIBLE else View.GONE
-        itemView.progressBar.visibility = if (networkStatus?.status == Status.LOADING) View.VISIBLE else View.GONE
+        itemView.retryButton.visibility = if (networkStatus?.status == Status.FAILED) View.VISIBLE else View.INVISIBLE
+        itemView.progressBar.visibility = if (networkStatus?.status == Status.LOADING) View.VISIBLE else View.INVISIBLE
     }
 
     companion object {

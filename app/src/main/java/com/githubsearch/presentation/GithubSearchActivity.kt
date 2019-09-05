@@ -28,7 +28,7 @@ class GithubSearchActivity : AppCompatActivity() {
         initView()
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(GithubSearchViewModel::class.java)
         viewModel.repositoriesLiveData.observe(this, Observer {
-            (recyclerView.adapter as RepositoryAdapter).submitList(it)
+            (recyclerView.adapter as RepositoryAdapter).setData(it, viewModel.queryLiveData.value?.query?:"")
         })
         viewModel.networkStatusLiveData.observe(this, Observer {
             (recyclerView.adapter as RepositoryAdapter).setNetworkState(it)

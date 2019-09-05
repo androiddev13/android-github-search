@@ -5,6 +5,7 @@ import com.githubsearch.BuildConfig
 import com.githubsearch.data.storage.GithubApiService
 import dagger.Module
 import dagger.Provides
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -21,9 +22,11 @@ class NetworkModule {
         return if (BuildConfig.DEBUG) {
             OkHttpClient.Builder()
                 .addInterceptor(getLoggingInterceptor())
+                .addInterceptor(getQueryKeysInterceptor())
                 .build()
         } else {
             OkHttpClient.Builder()
+                .addInterceptor(getQueryKeysInterceptor())
                 .build()
         }
     }
@@ -43,11 +46,28 @@ class NetworkModule {
     companion object {
 
         private const val TAG_NETWORKING_LOG = "Networking"
+        private const val KEY_CLIENT_ID = "client_id"
+        private const val KEY_CLIENT_SECRET = "client_secret"
 
         fun getLoggingInterceptor(): HttpLoggingInterceptor {
             val logger = HttpLoggingInterceptor.Logger { message -> Log.d(TAG_NETWORKING_LOG, message) }
             return HttpLoggingInterceptor(logger)
                 .apply { level = HttpLoggingInterceptor.Level.BODY }
+        }
+
+        /**
+         * @return [Interceptor] which adds query with client id and secret keys to each request.
+         */
+        fun getQueryKeysInterceptor(): Interceptor {
+            return Interceptor {
+                val url = it.request()
+                    .url()
+                    .newBuilder()
+                    .addQueryParameter(KEY_CLIENT_ID, BuildConfig.CLIENT_ID)
+                    .addQueryParameter(KEY_CLIENT_SECRET, BuildConfig.CLIENT_SECRET_KEY)
+                    .build()
+                it.proceed(it.request().newBuilder().url(url).build())
+            }
         }
     }
 

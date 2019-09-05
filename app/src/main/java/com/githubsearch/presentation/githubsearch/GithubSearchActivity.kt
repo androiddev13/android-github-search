@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.githubsearch.R
 import com.githubsearch.data.model.Status
 import com.jakewharton.rxbinding2.widget.RxSearchView
+import com.jakewharton.rxbinding2.widget.RxTextView
 import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_github_search.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -21,6 +23,8 @@ class GithubSearchActivity : AppCompatActivity() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: GithubSearchViewModel
+
+    private var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -46,6 +50,11 @@ class GithubSearchActivity : AppCompatActivity() {
         })
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
+    }
+
     private fun initView() {
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
@@ -53,12 +62,13 @@ class GithubSearchActivity : AppCompatActivity() {
             RepositoryAdapter { viewModel.retry() }
 
         swipeRefreshLayout.setOnRefreshListener {
-            if (searchView.query.isNotEmpty()) viewModel.refresh() else swipeRefreshLayout.isRefreshing = false
+            if (editText.text?.toString()?.isNotEmpty() == true) viewModel.refresh() else swipeRefreshLayout.isRefreshing = false
         }
 
-        RxSearchView.queryTextChanges(searchView)
+        disposable = RxTextView.textChanges(editText)
+            .skipInitialValue()
             .debounce(1, TimeUnit.SECONDS)
-            .filter { it.isNotEmpty() }
+            .filter { it.isNotEmpty() && viewModel.queryLiveData.value?.query != it.toString() }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{
                 viewModel.setQuery(it.toString())

@@ -1,4 +1,4 @@
-package com.githubsearch.presentation
+package com.githubsearch.presentation.githubsearch
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.item_repository.view.*
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.text.SpannableString
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.githubsearch.toString
 

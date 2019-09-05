@@ -1,6 +1,6 @@
 package com.githubsearch.di.module
 
-import com.githubsearch.presentation.GithubSearchActivity
+import com.githubsearch.presentation.githubsearch.GithubSearchActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

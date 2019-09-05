@@ -1,7 +1,6 @@
 package com.githubsearch.data.storage
 
 import com.githubsearch.data.exception.NetworkException
-import com.githubsearch.data.model.GithubErrorResponse
 import com.google.gson.Gson
 import io.reactivex.Completable
 import io.reactivex.Single

@@ -1,4 +1,4 @@
-package com.githubsearch.presentation
+package com.githubsearch.presentation.githubsearch
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

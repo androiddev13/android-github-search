@@ -1,4 +1,4 @@
-package com.githubsearch.presentation
+package com.githubsearch.presentation.githubsearch
 
 import android.view.ViewGroup
 import androidx.paging.PagedList
@@ -22,8 +22,13 @@ class RepositoryAdapter(private val onRetryClick: ()-> Unit)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
-            Item.REPOSITORY.value -> RepositoryViewHolder.create(parent)
-            Item.NETWORK_STATUS.value -> RepositoryNetworkStatusViewHolder.create(parent, onRetryClick)
+            Item.REPOSITORY.value -> RepositoryViewHolder.create(
+                parent
+            )
+            Item.NETWORK_STATUS.value -> RepositoryNetworkStatusViewHolder.create(
+                parent,
+                onRetryClick
+            )
             else -> throw IllegalStateException("Unknown view type")
         }
     }

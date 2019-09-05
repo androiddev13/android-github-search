@@ -1,17 +1,14 @@
-package com.githubsearch.presentation
+package com.githubsearch.presentation.githubsearch
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.githubsearch.R
-import com.githubsearch.data.model.NetworkStatus
 import com.githubsearch.data.model.Status
 import com.jakewharton.rxbinding2.widget.RxSearchView
-import com.jakewharton.rxbinding2.widget.RxTextView
 import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_github_search.*
@@ -52,7 +49,8 @@ class GithubSearchActivity : AppCompatActivity() {
     private fun initView() {
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
-        recyclerView.adapter = RepositoryAdapter { viewModel.retry() }
+        recyclerView.adapter =
+            RepositoryAdapter { viewModel.retry() }
 
         swipeRefreshLayout.setOnRefreshListener {
             if (searchView.query.isNotEmpty()) viewModel.refresh() else swipeRefreshLayout.isRefreshing = false

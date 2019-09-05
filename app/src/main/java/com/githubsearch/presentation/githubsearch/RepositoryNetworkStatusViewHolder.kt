@@ -1,4 +1,4 @@
-package com.githubsearch.presentation
+package com.githubsearch.presentation.githubsearch
 
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +28,10 @@ class RepositoryNetworkStatusViewHolder(view: View,  private val onRetryClick: (
         fun create(parent: ViewGroup, onRetryClick: () -> Unit): RepositoryNetworkStatusViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val view = layoutInflater.inflate(R.layout.item_network_status, parent, false)
-            return RepositoryNetworkStatusViewHolder(view, onRetryClick)
+            return RepositoryNetworkStatusViewHolder(
+                view,
+                onRetryClick
+            )
         }
     }
 

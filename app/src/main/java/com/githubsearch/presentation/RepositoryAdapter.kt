@@ -51,12 +51,12 @@ class RepositoryAdapter(private val onRetryClick: ()-> Unit)
         return networkStatus != null && networkStatus != NetworkStatus.SUCCESS
     }
 
-    fun setNetworkState(newNetworkState: NetworkStatus?) {
+    fun setNetworkStatus(newNetworkStatus: NetworkStatus?) {
         if (currentList != null) {
             if (currentList!!.size != 0) {
                 val previousState = networkStatus
                 val hadExtraRow = hasExtraRow()
-                networkStatus = newNetworkState
+                networkStatus = newNetworkStatus
                 val hasExtraRow = hasExtraRow()
                 if (hadExtraRow != hasExtraRow) {
                     if (hadExtraRow) {
@@ -64,9 +64,11 @@ class RepositoryAdapter(private val onRetryClick: ()-> Unit)
                     } else {
                         notifyItemInserted(super.getItemCount())
                     }
-                } else if (hasExtraRow && previousState !== newNetworkState) {
+                } else if (hasExtraRow && previousState !== newNetworkStatus) {
                     notifyItemChanged(itemCount - 1)
                 }
+            } else {
+                notifyDataSetChanged()
             }
         }
     }

@@ -35,13 +35,16 @@ class GithubSearchActivity : AppCompatActivity() {
             (recyclerView.adapter as RepositoryAdapter).setData(it, viewModel.queryLiveData.value?.query?:"")
         })
         viewModel.networkStatusLiveData.observe(this, Observer {
-            (recyclerView.adapter as RepositoryAdapter).setNetworkState(it)
+            (recyclerView.adapter as RepositoryAdapter).setNetworkStatus(it)
         })
         viewModel.initialLoadStatusLiveData.observe(this, Observer {
             when (it.status) {
                 Status.LOADING -> swipeRefreshLayout.isRefreshing = true
                 Status.SUCCESS -> swipeRefreshLayout.isRefreshing = false
-                Status.FAILED -> swipeRefreshLayout.isRefreshing = false
+                Status.FAILED -> {
+                    swipeRefreshLayout.isRefreshing = false
+                    (recyclerView.adapter as RepositoryAdapter).setNetworkStatus(null)
+                }
             }
         })
     }
@@ -51,7 +54,9 @@ class GithubSearchActivity : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = RepositoryAdapter { viewModel.retry() }
 
-        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+        swipeRefreshLayout.setOnRefreshListener {
+            if (searchView.query.isNotEmpty()) viewModel.refresh() else swipeRefreshLayout.isRefreshing = false
+        }
 
         RxSearchView.queryTextChanges(searchView)
             .debounce(1, TimeUnit.SECONDS)

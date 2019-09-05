@@ -38,12 +38,11 @@ class GithubSearchViewModel @Inject constructor(repoRepository: RepoRepository):
     val queryLiveData: LiveData<SearchQuery>
         get() = _queryLiveData
 
-    private val pageSize = 10
+    private val pageSize = 20
 
     init {
         val config = PagedList.Config.Builder()
             .setPageSize(pageSize)
-            .setInitialLoadSizeHint(pageSize)
             .build()
         _repositoriesLiveData = Transformations.switchMap<SearchQuery, PagedList<Repository>>(_queryLiveData) {
             repositoryDataSourceFactory.query = it

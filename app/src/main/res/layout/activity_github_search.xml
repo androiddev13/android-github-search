@@ -15,11 +15,11 @@
         android:layout_marginEnd="16dp"
         >
 
-        <androidx.appcompat.widget.SearchView
+        <SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:queryBackground="@android:color/transparent"
+            android:queryBackground="@android:color/transparent"
             />
 
     </androidx.cardview.widget.CardView>

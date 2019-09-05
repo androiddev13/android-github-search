@@ -3,6 +3,7 @@ package com.githubsearch.di.module
 import android.util.Log
 import com.githubsearch.BuildConfig
 import com.githubsearch.data.storage.GithubApiService
+import com.githubsearch.data.storage.RxErrorHandlingCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
@@ -38,7 +39,7 @@ class NetworkModule {
             .baseUrl("https://api.github.com")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
             .build()
             .create(GithubApiService::class.java)
     }

@@ -10,8 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.githubsearch.R
 import com.githubsearch.data.model.NetworkStatus
 import com.githubsearch.data.model.Status
+import com.jakewharton.rxbinding2.widget.RxSearchView
+import com.jakewharton.rxbinding2.widget.RxTextView
 import dagger.android.AndroidInjection
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_github_search.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GithubSearchActivity : AppCompatActivity() {
@@ -49,16 +53,13 @@ class GithubSearchActivity : AppCompatActivity() {
 
         swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.setQuery(query?:"test") // TODO better logic is required
-                return true
+        RxSearchView.queryTextChanges(searchView)
+            .debounce(1, TimeUnit.SECONDS)
+            .filter { it.isNotEmpty() }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe{
+                viewModel.setQuery(it.toString())
             }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-        })
     }
 
 }

@@ -22,14 +22,6 @@
             android:padding="16dp"
             >
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/searchImageView"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginRight="16dp"
-                app:srcCompat="@drawable/ic_search_black"
-                />
-
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
@@ -38,8 +30,9 @@
                 android:maxLines="1"
                 android:inputType="text"
                 android:imeOptions="actionDone"
+                android:drawableLeft="@drawable/ic_search_black"
+                android:drawablePadding="16dp"
                 />
-
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
